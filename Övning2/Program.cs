@@ -5,83 +5,56 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-/*
- * 
- * A new Git repository has been created for you in c:\Users\User\Documents\source\repos\Övning2.
-Opening repositories:
-c:\Users\User\Documents\source\repos\Övning2
- * 
- * */
-
 namespace Intro2
 {
     class Program
     {
         static void Main(string[] args)
         {
-            /* 
-             * 1.Print main menu
-             * 2.Parse input & make sure it's a correct command
-             * 3.Iterate the program until command 0
-             */
-
             PrintMainMenu();
 
-            bool parsed = true;
             bool stopProgram = false;
+
             do
             {
-                string inputStr;
-                Console.Write("Ange kommando: ");
-                inputStr = Console.ReadLine();
-                parsed = int.TryParse(inputStr, out int input);
-                if (!parsed)
-                {
-                    Console.WriteLine($"Angivet kommando har fel typ. Du skrev: \"{inputStr}\". Skriv in kommandot med siffror istället!");
-                }
-                else
-                {
-                    switch (input)
-                    {
-                        case 0:
-                            Console.WriteLine("Du har valt att avsluta programmet!");
-                            stopProgram = true;
-                            break;
-                        case 1:
-                            GetPriceForPerson(true);
-                            break;
-                        case 2:
-                            PrintTenTimes();
-                            break;
-                        case 3:
-                            PrintThirdWord();
-                            break;
-                        case 4:
-                            CalculateGroupPrice();
-                            break;
-                        case 9:
-                            PrintMainMenu();
-                            break;
-                        default:
-                            Console.WriteLine($"Angivet kommando finns ej {input}");
-                            break;
-                    }
-                }
-            } while (!parsed || !stopProgram);
+                int answer = Util.AskInt("\nAnge kommando:", true);
 
+                switch (answer)
+                {
+                    case 0:
+                        Console.WriteLine("Du har valt att avsluta programmet!");
+                        stopProgram = true;
+                        break;
+                    case 1:
+                        GetPriceForPerson(true);
+                        break;
+                    case 2:
+                        PrintTenTimes();
+                        break;
+                    case 3:
+                        PrintThirdWord();
+                        break;
+                    case 4:
+                        CalculateGroupPrice();
+                        break;
+                    case 9:
+                        PrintMainMenu();
+                        break;
+                    default:
+                        Console.WriteLine($"Angivet kommando finns ej {answer}");
+                        break;
+                }
+            } while (!stopProgram);
         }
 
         private static void PrintThirdWord()
         {
-            /*
-             * Ask user to enter a sentence with at least three words,
-             * then print the third word.
-             */
-            Console.Write("Skriv en mening med minst tre ord: ");
-            string inputStr = Console.ReadLine();
-            
+            string inputStr = Util.Ask("Skriv en mening med minst tre ord:");
+            Console.WriteLine($"'{inputStr}'");
+
             //Remove duplicate spaces
             inputStr = Regex.Replace(inputStr, @"\s+", " ");
+            inputStr = inputStr.Trim();
 
             string[] stringArr = inputStr.Split();
             if (stringArr.Length < 3)
@@ -90,19 +63,13 @@ namespace Intro2
             }
             else
             {
-                Console.WriteLine($"{inputStr}");
                 Console.WriteLine($"Det tredje ordet: {stringArr[2]}");
             }
         }
 
         private static void PrintTenTimes()
         {
-            /*
-             * Ask the user to enter some text. Print the text ten times on the same row.
-             */
-            string inputStr;
-            Console.Write("Skriv in en godtycklig text: ");
-            inputStr = Console.ReadLine();
+            string inputStr = Util.Ask("Skriv in en godtycklig text: ");
 
             if (inputStr.Length > 0)
             {
@@ -120,11 +87,7 @@ namespace Intro2
 
         private static void CalculateGroupPrice()
         {
-            /*
-             * Ask the user for how many persons they are; calculate total price for the group.
-             */
-
-            int nbrOfPersons = GetNumberOfPersons();
+            int nbrOfPersons = Util.AskInt("Ange hur många ni är i sällskapet: ", true);
 
             int totalPrice = 0;
             for (int i = 0; i < nbrOfPersons; i++)
@@ -135,86 +98,40 @@ namespace Intro2
             Console.WriteLine($"Totalt pris för gruppen av {nbrOfPersons} personer är {totalPrice} kr.");
         }
 
-        private static int GetNumberOfPersons()
-        {
-            bool parsed = true;
-            int numberOfPersons;
-            do
-            {
-                string inputStr;
-                Console.Write("Ange hur många ni är i sällskapet: ");
-                inputStr = Console.ReadLine();
-                parsed = int.TryParse(inputStr, out numberOfPersons);
-                if (!parsed)
-                {
-                    Console.WriteLine($"Du måste ange sällskapets antal med en siffra. Du skrev: \"{inputStr}\". Skriv in antalet med en siffra istället!");
-                }
-            } while (!parsed);
-
-            return numberOfPersons;
-        }
-
         private static int GetPriceForPerson(bool printMessages)
         {
-            /*
-             * Menyval 1: Ungdom eller pensionär
-             * 1. Användaren anger en ålder i siffror
-             * 2. Programmet konverterar detta från en ​sträng till en ​int
-             * 3. Programmet kollar om personen är ungdom (​under 20 år)
-             * 4. Om det ovanstående är sant skall programmet skriva ut: Ungdomspris: 80kr
-             * 5. Annars kollar programmet om personen är en pensionär (​över 64 år)
-             * 6. Om ovanstående är sant skall programmet skruva ut: Pensionärspris: 90kr
-             * 7. Annars skall programmet skriva ut: Standardpris: 120kr
-             */
-
             int price = 0;
-            bool parsed = true;
-            do
+            int age = Util.AskInt("Ange ålder: ", true);
+            if (age < 5)
             {
                 if (printMessages)
-                    Console.Write("Ange ålder: ");
-
-                string inputStr;
-                inputStr = Console.ReadLine();
-                parsed = int.TryParse(inputStr, out int age);
-                if (!parsed)
-                {
-                    Console.WriteLine($"Du måste ange ålder med siffror. Du skrev: \"{inputStr}\". Skriv in ålder med siffror istället!");
-                }
-                else
-                {
-                    if (age < 5)
-                    {
-                        if (printMessages)
-                            Console.WriteLine("Grattis, barn under 5 år går gratis!");
-                        price = 0;
-                    }
-                    else if (age < 20)
-                    {
-                        if (printMessages)
-                            Console.WriteLine("Ungdomspris: 80 kr.");
-                        price = 80;
-                    }
-                    else if (age > 100)
-                    {
-                        if (printMessages)
-                            Console.WriteLine("Grattis, pensionärer över 100 går gratis!");
-                        price = 0;
-                    }
-                    else if (age > 64)
-                    {
-                        if (printMessages)
-                            Console.WriteLine("Pensionärspris: 90 kr.");
-                        price = 90;
-                    }
-                    else
-                    {
-                        if (printMessages)
-                            Console.WriteLine("Standardpris: 120 kr.");
-                        price = 120;
-                    }
-                }
-            } while (!parsed);
+                    Console.WriteLine("Grattis, barn under 5 år går gratis!");
+                price = 0;
+            }
+            else if (age < 20)
+            {
+                if (printMessages)
+                    Console.WriteLine("Ungdomspris: 80 kr.");
+                price = 80;
+            }
+            else if (age > 100)
+            {
+                if (printMessages)
+                    Console.WriteLine("Grattis, pensionärer över 100 går gratis!");
+                price = 0;
+            }
+            else if (age > 64)
+            {
+                if (printMessages)
+                    Console.WriteLine("Pensionärspris: 90 kr.");
+                price = 90;
+            }
+            else
+            {
+                if (printMessages)
+                    Console.WriteLine("Standardpris: 120 kr.");
+                price = 120;
+            }
 
             return price;
         }
