@@ -51,10 +51,10 @@ namespace Intro2
                             GetPriceForPerson(true);
                             break;
                         case 2:
-                            PrintTenTimes(input);
+                            PrintTenTimes();
                             break;
                         case 3:
-                            PrintThirdWord(input);
+                            PrintThirdWord();
                             break;
                         case 4:
                             CalculateGroupPrice();
@@ -71,7 +71,7 @@ namespace Intro2
 
         }
 
-        private static void PrintThirdWord(int input)
+        private static void PrintThirdWord()
         {
             /*
              * Ask user to enter a sentence with at least three words,
@@ -95,7 +95,7 @@ namespace Intro2
             }
         }
 
-        private static void PrintTenTimes(int input)
+        private static void PrintTenTimes()
         {
             /*
              * Ask the user to enter some text. Print the text ten times on the same row.
